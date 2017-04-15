@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css?family=Advent+Pro:100,200,400|Arima+Madurai:100,300,400|BioRhyme:200,300,400|Catamaran:200,400|Montserrat|Nixie+One|Oswald:300,400|Raleway:200,300,400|Roboto+Slab:100,300|Scope+One|Work+Sans:200');
+/*
+
+    font-family: 'Oswald', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Catamaran', sans-serif;
+    font-family: 'Nixie One', cursive;
+    font-family: 'Scope One', serif;
+    font-family: 'BioRhyme', serif;
+    font-family: 'Advent Pro', sans-serif;
+    font-family: 'Arima Madurai', cursive;
+    font-family: 'Work Sans', sans-serif;
+    font-family: 'Roboto Slab', serif;
+    font-family: 'Raleway', sans-serif;
+
+*/
+body{
+    background: #ffffff;
+    font-size: 16px;
+    font-family: 'Catamaran', sans-serif;
+    font-family: 'Nixie One', cursive;
+    font-family: 'Scope One', serif;
+}
+.top-menu{
+    background: #fff;
+    color: #000;
+    border: none;
+}
+.logo-container{
+	text-align: center;
+}
+.logo{
+	background: #ffffff;
+    padding: 1em;
+    max-height: 150px;
+	max-width: 280px;
+}
+#navbar a.btn:hover, #navbar a.btn:focus{
+   color: #f00; 
+}
+.logo img{
+    height: 3em;
+}
+.jumbotron{
+    background: url("http://orig04.deviantart.net/312a/f/2013/042/c/3/gradient_toshiba_background_by_daproba-d5uo24e.png") no-repeat;
+    background: url(http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/weather.png);
+    padding-top: 10em;
+    padding-bottom: 10em;
+}
+.jumbotron.search{
+    padding-top: 8em;
+}
+.search-slogan{
+    color: #525252;
+    text-align: center;
+    font-family: 'BioRhyme', serif;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Catamaran', sans-serif;
+    font-family: 'Nixie One', cursive;
+    font-family: 'Scope One', serif;
+    font-size: 3em;
+}
+.container.search{
+    margin-top: -8em;
+    background: #fff;
+}
+.search-form input, .search-form select{
+    border-radius: 0;
+}
+.home-items{
+    
+}
+
+.home-items .item, .user-items .item{
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+.item img{
+    width: 100%;
+}
+.form-container{
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    position: relative;
+}
+.general-forms{
+    padding-top: 3em;
+    padding-bottom: 3em;
+}
+.general-forms .content{
+    background: #fff;
+    padding: 1em 2em;
+    border-radius: 5px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.2);
+}
+.general-forms .form-logo{
+    padding: 1em 0;
+}
+.general-forms .form-logo img{
+    max-width: 33%;
+}
+.general-forms .title{
+    text-align: center;
+    padding: 0 0 1em 0;
+    font-weight: 500;
+    font-size: 2em;
+    font-family: 'Oswald', sans-serif;
+    font-family: 'Scope One', serif;
+}
+.user-forms, .user-items{
+    margin-top: 5em;
+    margin-bottom: 2em;
+}
+.user-items .title{
+    font-family: 'Scope One', serif;
+    font-size: 2.8em;
+    font-weight: 300;
+}
+.no-post{
+    font-size: 17px;
+}
+footer{
+    margin-top: 5em;
+    padding-top: 5em;
+    padding-bottom: 5em;
+    background: #EBEBEB;
+}
+
+footer .title{
+    font-family: 'Catamaran', sans-serif; 
+}
