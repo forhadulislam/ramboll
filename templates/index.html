@@ -8,40 +8,85 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="/css/main.css"/>
     
-	<script src="https://unpkg.com/vue/dist/vue.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 	
-	
+	<style>
+
+		#right-panel select, #right-panel input {
+			font-size: 15px;
+		}
+		label{
+			display: block;
+		}
+		.filter select {
+			width: 100%;
+		}
+		.filter .bootstrap-select{
+			width: 100%;
+		}
+
+      #right-panel i {
+        font-size: 12px;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        width: 100%;
+        height: 520px;
+      }
+    </style>
     <title>Ramboll - Data</title>
   </head>
   <body>
-    
-	<div id="app">
-	  {{ message }}
-	</div>
-	
-    <div id="root" class="col-md-8 col-md-offset-2">
+			
+    <div id="root" class="col-md-10 col-md-offset-1">
 		
 		<div class="row logo-container">
 			<img src="https://cdn1.nrgedge.net/company/RAMBOLL_CL.png" class="logo" />
 		</div>
 		<div class="row">
-			<div class="col-md-4">
-				<form>
-					Stops
-					<select class="selectpicker" data-live-search="true">
-					  <option data-tokens="ketchup mustard">Hot Dog, Fries and a Soda</option>
-					  <option data-tokens="mustard">Burger, Shake and a Smile</option>
-					  <option data-tokens="frosting">Sugar, Spice and all things nice</option>
+			<div class="col-md-3">
+				<form class="filter" onsubmit="return false;">
+					<label><b>Lines</b></label>
+					<select class="selectpicker" data-live-search="true">						
+						{% for key in outd %}
+							<option value="{{ outd[key].lineid }}">{{ outd[key].lineid }}</option>
+						{% endfor %}
 					</select>
-
+					
+					
+					<label><b>Lines</b></label>
+					<select id="start">
+					  <option value="Halifax, NS">Halifax, NS</option>
+					  <option value="Boston, MA">Boston, MA</option>
+					</select>
+					<br>
+					<b>Waypoints:</b>
+					<select multiple id="waypoints">
+					  <option value="montreal, quebec">Montreal, QBC</option>
+					  <option value="toronto, ont">Toronto, ONT</option>
+					</select>
+					<br>
+					<b>End:</b>
+					<select id="end">
+					  <option value="Vancouver, BC">Vancouver, BC</option>
+					  <option value="Seattle, WA">Seattle, WA</option>
+					</select>
+					<br>
+					  <input type="submit" id="submit">
+					
 				</form>
-			
+				
+				
 			</div>
 			
-			<div class="col-md-8">
-			
-			
+			<div class="col-md-9">
+				<div id="map"></div>
+				<div id="right-panel">
+				<div>		
 			</div>
 		</div>
 	
@@ -51,26 +96,97 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
 	<script>
-		window.onload = function(){
-		
-			$('.selectpicker').selectpicker({
-			  style: 'btn-info',
-			  size: 4
-			});
+      function initMap() {
+        var directionsService = new google.maps.DirectionsService;
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 8,
+          center: {lat: 64.86586739,	lng: 25.01942871}
+        });
+        directionsDisplay.setMap(map);
 
+        document.getElementById('submit').addEventListener('click', function() {
+          calculateAndDisplayRoute(directionsService, directionsDisplay);		  
+        });
+      }
+
+      function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+        var waypts = [];
+        var checkboxArray = document.getElementById('waypoints');
+        /*for (var i = 0; i < checkboxArray.length; i++) {
+          if (checkboxArray.options[i].selected) {
+            waypts.push({
+              location: checkboxArray[i].value,
+              stopover: true
+            });
+          }
+        }*/
 		
-			var app = new Vue({
-			  el: '#app',
-			  data: {
-				message: 'Hello Vue!'
-			  }
-			})
+		var coordinates = [	
+			{lat: 64.86586739,	lng: 25.01942871},
+			{lat: 64.86587853,	lng: 25.01909606},
+			{lat: 64.86465718,	lng: 25.11850107},
+			{lat: 64.82594852,	lng: 25.25233702},
+			{lat: 64.82907605,	lng: 25.24484433},
+			{lat: 64.90379798,	lng: 25.11166739},
+			{lat: 64.86445745,	lng: 25.12094902},
+			{lat: 64.9123585,	lng: 25.10329962},
+			{lat: 64.87180222,	lng: 25.15727533},
+			{lat: 64.834478,	lng: 25.20760645},
+			/*{lat: 64.91142753, lng: 25.10367729},
+			{lat: 64.89205145,	lng: 25.12755702},
+			{lat: 64.82079081,	lng: 25.27331097},
+			{lat: 64.82574189,	lng: 25.25289512},
+			{lat: 64.86486785,	lng: 25.00910621},
+			{lat: 64.90429807,	lng: 25.11114184},
+			{lat: 64.87748615,	lng: 25.15123049},
+			{lat: 64.86192696,	lng: 25.13562529},
+			{lat: 64.84031178,	lng: 25.17987332},
+			{lat: 64.89256767,	lng: 25.12670847},
+			{lat: 64.86447242,	lng: 25.04241608}*/
+        ];
+		
+		txtcor = [
 			
-			console.log(app)
+			"Sallisentie P",
+			"Vesankuja P",
+			"Jaakola I",
+			"Jaakola L"
+		];
+		for (var i = 0; i < coordinates.length; i++) {
+          
+            waypts.push({
+              //location: txtcor[i],
+			  location: new google.maps.LatLng(coordinates[i]["lat"],coordinates[i]["lng"]),
+              stopover: true
+            });
+          
+        }
+		//waypts = txtcor;
+		//Directions request failed due to ZERO_RESULTS
 		
-		}
+		console.log(waypts);
 		
-	</script>
-   
+        directionsService.route({
+          //origin: document.getElementById('start').value,
+          //destination: document.getElementById('end').value,
+		  origin: new google.maps.LatLng(coordinates[0]["lat"],coordinates[0]["lng"]),
+          destination: new google.maps.LatLng(coordinates[coordinates.length-1]["lat"],coordinates[coordinates.length-1]["lng"]),
+          waypoints: waypts,
+          optimizeWaypoints: true,
+          travelMode: 'DRIVING'
+        }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+            var route = response.routes[0];
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVp78IAm96xBNFCH6tJjmYlp3HlXMcews&callback=initMap">
+    </script>
   </body>
 </html>
