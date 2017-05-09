@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+       
+    <title>Markers</title>
+	<link rel="stylesheet" href="https://bootswatch.com/flatly/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="/css/main.css"/>
+    
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+	
+    <style>
+		#right-panel select, #right-panel input {
+			font-size: 15px;
+		}
+		label{
+			display: block;
+		}
+		.filter select {
+			width: 100%;
+		}
+		.filter .bootstrap-select{
+			width: 100%;
+		}
+
+		#right-panel i {
+			font-size: 12px;
+		}
+		html, body {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		#map {
+			width: 100%;
+			height: 520px;
+		}
+    </style>
+  </head>
+  <body>
+  
+  
+	<div id="root" class="col-md-10 col-md-offset-1">
+		
+		<div class="row logo-container">
+			<img src="https://cdn1.nrgedge.net/company/RAMBOLL_CL.png" class="logo" />
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<form class="filter" onsubmit="return false;">
+					<label><b>Visualize</b></label>
+					<select class="selectpicker" id="lines" data-live-search="true">
+						<option value="passengersbusstops">Passengers bus stops</option>
+						<option value="europerlineid">Euro per line</option>														
+						<option value="passengersinline">Passengers in line</option>						
+					</select>	
+					
+					<input type="submit" class="btn-primary" id="submit">
+					
+				</form>			
+			</div>
+			
+			<div class="col-md-9">
+				<div id="map"></div>
+				<div id="right-panel">
+				<div>		
+			</div>
+		</div>
+	
+	
+	</div>   
+	
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+   
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVp78IAm96xBNFCH6tJjmYlp3HlXMcews&callback=initMap">
+    </script>
+	
+	<script>
+	
+		var map;
+		
+      function initMap() {
+        var myLatLng = {"lat":65.0036921837094,"lng":25.478750360755};
+        var myLatLng2 = {"lat":65.0142721669481,"lng":25.471164800819};
+
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: myLatLng
+        });		
+		
+      }
+	
+		$(document).ready(function(){
+			
+			$('#submit').on('click', function(){
+				$.ajax({
+					url: "/passengersbusstops", 
+					success: function(result){
+						coordinates = result;
+						coordinates = coordinates.slice(1, 800);						
+						
+						for (var i = 0; i < coordinates.length; i++) {
+          
+							var myLatLngo = {"lat":coordinates[i]["lat"],"lng":coordinates[i]["lng"]};
+							var rating = (coordinates[i]["Freq"] / 53242) * 100;
+							var color, size;
+							size = 1;
+							if(rating <= 10){
+								color = "#2ecc71";
+								size = 0.5;
+							}else if(rating <= 50 && rating > 10){
+								color = "#f39c12";
+								size = 1;
+							}else if(rating <= 75 && rating > 50){
+								color = "#2980b9";
+								size = 1;
+							}else{
+								color = "#F00";
+								size = 2;
+							}
+							var oMarker = new google.maps.Marker({
+								position: myLatLngo,
+								sName: "Marker Name",
+								map: map,
+								icon: {
+									path: google.maps.SymbolPath.CIRCLE,
+									scale: 12 * size,
+									fillColor: color,
+									fillOpacity: 0.9,
+									strokeWeight: 0.9
+								},
+							});
+						}
+						
+						
+						
+					}
+				});
+			});
+			
+		});
+	</script>
+	
+  </body>
+</html>

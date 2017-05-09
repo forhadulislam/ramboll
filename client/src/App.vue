@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <div class="row logo-container">
+		<img src="https://cdn1.nrgedge.net/company/RAMBOLL_CL.png" class="logo" />
+	</div>
     <router-view></router-view>
   </div>
 </template>

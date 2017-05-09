@@ -51,17 +51,18 @@
 			<div class="col-md-3">
 				<form class="filter" onsubmit="return false;">
 					<label><b>Lines</b></label>
-					<select class="selectpicker" data-live-search="true">						
+					<select class="selectpicker" id="lines" data-live-search="true">						
 						{% for key in outd %}
 							<option value="{{ outd[key].lineid }}">{{ outd[key].lineid }}</option>
 						{% endfor %}
 					</select>
 					
 					
-					<label><b>Lines</b></label>
-					<select id="start">
-					  <option value="Halifax, NS">Halifax, NS</option>
-					  <option value="Boston, MA">Boston, MA</option>
+					<label><b>Age group</b></label>
+					<select class="selectpicker" data-live-search="true" id="start">
+						{% for key in ageGroups %}
+							<option value="{{ ageGroups[key].age_group }}">{{ ageGroups[key].age_group }}</option>
+						{% endfor %}
 					</select>
 					<br>
 					<b>Waypoints:</b>
@@ -96,9 +97,11 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
 	<script>
-      function initMap() {
-        var directionsService = new google.maps.DirectionsService;
-        var directionsDisplay = new google.maps.DirectionsRenderer;
+		var coordinates, directionsService, directionsDisplay;
+		coordinates = [{"lat":65.0036921837094,"lng":25.478750360755},{"lat":65.0142721669481,"lng":25.471164800819}];
+		function initMap() {
+        directionsService = new google.maps.DirectionsService;
+        directionsDisplay = new google.maps.DirectionsRenderer;
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 8,
           center: {lat: 64.86586739,	lng: 25.01942871}
@@ -112,42 +115,9 @@
 
       function calculateAndDisplayRoute(directionsService, directionsDisplay) {
         var waypts = [];
-        var checkboxArray = document.getElementById('waypoints');
-        /*for (var i = 0; i < checkboxArray.length; i++) {
-          if (checkboxArray.options[i].selected) {
-            waypts.push({
-              location: checkboxArray[i].value,
-              stopover: true
-            });
-          }
-        }*/
+        var checkboxArray = document.getElementById('waypoints');	
 		
-		var coordinates = [	
-			{lat: 64.86586739,	lng: 25.01942871},
-			{lat: 64.86587853,	lng: 25.01909606},
-			{lat: 64.86465718,	lng: 25.11850107},
-			{lat: 64.82594852,	lng: 25.25233702},
-			{lat: 64.82907605,	lng: 25.24484433},
-			{lat: 64.90379798,	lng: 25.11166739},
-			{lat: 64.86445745,	lng: 25.12094902},
-			{lat: 64.9123585,	lng: 25.10329962},
-			{lat: 64.87180222,	lng: 25.15727533},
-			{lat: 64.834478,	lng: 25.20760645},
-			/*{lat: 64.91142753, lng: 25.10367729},
-			{lat: 64.89205145,	lng: 25.12755702},
-			{lat: 64.82079081,	lng: 25.27331097},
-			{lat: 64.82574189,	lng: 25.25289512},
-			{lat: 64.86486785,	lng: 25.00910621},
-			{lat: 64.90429807,	lng: 25.11114184},
-			{lat: 64.87748615,	lng: 25.15123049},
-			{lat: 64.86192696,	lng: 25.13562529},
-			{lat: 64.84031178,	lng: 25.17987332},
-			{lat: 64.89256767,	lng: 25.12670847},
-			{lat: 64.86447242,	lng: 25.04241608}*/
-        ];
-		
-		txtcor = [
-			
+		txtcor = [			
 			"Sallisentie P",
 			"Vesankuja P",
 			"Jaakola I",
@@ -188,5 +158,22 @@
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVp78IAm96xBNFCH6tJjmYlp3HlXMcews&callback=initMap">
     </script>
+	<script>
+		$(document).ready(function(){
+			
+			$('#lines').on('change', function(){
+				$.ajax({
+					url: "/api/v1/get/line-routes/" + $(this).val(), 
+					success: function(result){
+						coordinates = result;
+						coordinates = coordinates.slice(1, 20);
+						calculateAndDisplayRoute(directionsService, directionsDisplay);
+						console.log(coordinates);
+					}
+				});
+			});
+			
+		});
+	</script>
   </body>
 </html>
